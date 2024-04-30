@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Clean Blog - Start Bootstrap Theme</title>
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom fonts for this template -->
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic"
+
+      rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"
+
+      rel="stylesheet" type="text/css">
+    <!-- Custom styles for this template -->
+    <link href="css/clean-blog.min.css" rel="stylesheet">
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+      <div class="container"><a class="navbar-brand" href="index.html">第二組期末報告</a>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item"> <br>
+            </li>
+          </ul>
+        </div>
+        <a class="navbar-brand" href="https://tsai-reena.github.io/home/"></a>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item"> <a class="nav-link" href="index.html">Home</a>
+            </li>
+            <li class="nav-item"> <a class="nav-link" href="about.html">UPdate</a>
+            </li>
+            <li class="nav-item"> <a class="nav-link" href="contact.html">Schedule</a>
+            </li>
+            <li class="nav-item"> <a class="nav-link" href="post.html">Demo</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <!-- Page Header -->
+    <header class="masthead" style="background-image: url('img/background.jpg')">
+      <div class="overlay"></div>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-md-10 mx-auto">
+            <div class="page-heading">
+              <h1>小主題</h1>
+              <span class="subheading">藍芽、紅外線</span> </div>
+          </div>
+        </div>
+      </div>
+    </header>
+    <!-- Main Content -->
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">藍芽 Bluetooth &amp; 超音波偵測</div>
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <table style="width: 100%;" border="1">
+            <tbody>
+              <tr>
+                <td class="b">//可設範圍（loop不能大於 set的秒數）<br>
+                  #include &lt;NewPing.h&gt;<br>
+                  #define TRIGGER_PIN&nbsp; 5<br>
+                  #define ECHO_PIN&nbsp;&nbsp;&nbsp;&nbsp; 6<br>
+                  #define MAX_DISTANCE 200<br>
+                  <br>
+                  #define&nbsp;&nbsp; DirR&nbsp;&nbsp;&nbsp; 12<br>
+                  #define&nbsp;&nbsp; DirL&nbsp;&nbsp;&nbsp; 11<br>
+                  #define&nbsp;&nbsp; PwmL&nbsp;&nbsp; 9<br>
+                  #define&nbsp;&nbsp; PwmR&nbsp; 10<br>
+                  <br>
+                  NewPing sonar(TRIGGER_PIN, ECHO_PIN, MAX_DISTANCE);<br>
+                  <br>
+                  int irin;<br>
+                  void cM(int dL,int dR,int sL,int sR){<br>
+                  &nbsp; digitalWrite(PwmL, 0);<br>
+                  &nbsp; digitalWrite(PwmR, 0);<br>
+                  &nbsp; delay(200); &nbsp;<br>
+                  &nbsp; digitalWrite(DirL,dL);<br>
+                  &nbsp; digitalWrite(DirR,dR);<br>
+                  &nbsp; analogWrite(PwmL,sL);<br>
+                  &nbsp; analogWrite(PwmR,sR);<br>
+                  }<br>
+                  int inB;<br>
+                  void setup(){<br>
+                  &nbsp; Serial.begin(115200);<br>
+                  &nbsp; pinMode( DirL , OUTPUT);<br>
+                  &nbsp; pinMode( DirR , OUTPUT);<br>
+                  &nbsp; cM(HIGH,HIGH,0,0);<br>
+                  }<br>
+                  void loop(){<br>
+                  &nbsp; if (Serial.available() &gt; 0) {<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp; inB= Serial.read();<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp; if (inB == '1') {<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if(sonar.ping_cm() &lt; 5){<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cM(HIGH,HIGH,0,0);
+                  //停<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  cM(LOW,HIGH,255,255);//順時針<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  cM(HIGH,HIGH,255,255);//前進<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else{<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  cM(HIGH,HIGH,150,255);//左前方前進<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; delay(2000);<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp; }<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp; else if (inB == '2') {<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if(sonar.ping_cm() &lt; 5){<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cM(HIGH,HIGH,0,0);
+                  //停<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  cM(LOW,HIGH,255,255);//順時針<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  cM(HIGH,HIGH,255,255);//前進<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else{<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  cM(HIGH,HIGH,255,255);//前進<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; delay(2000);<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp; }<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else if (inB == '3')&nbsp; {<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if(sonar.ping_cm()
+                  &lt; 5){<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  cM(HIGH,HIGH,0,0); //停<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  cM(HIGH,LOW,255,255);//逆時針<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  cM(HIGH,HIGH,255,255);//前進<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else{<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  cM(HIGH,HIGH,255,155);//右前方前進<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; delay(2000);<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp; }<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp; else if (inB == '4')&nbsp; {<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  cM(HIGH,LOW,255,255);//逆時針<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; delay(2000);<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp; }&nbsp; &nbsp;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp; else if (inB == '5') {<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if(sonar.ping_cm()
+                  &lt; 5){<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  cM(HIGH,HIGH,0,0); //停<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  cM(HIGH,LOW,255,255);//逆時針<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  cM(LOW,LOW,255,255);//後退<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else{<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  cM(LOW,LOW,255,255);//後退<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; delay(2000);<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp; } <br>
+                  &nbsp;&nbsp;&nbsp;&nbsp; else if (inB == '6')&nbsp; {<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  cM(LOW,HIGH,255,255);//順時針<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; delay(2000);<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp; }<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp; else if (inB == '7') {<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cM(HIGH,HIGH,0,0);
+                  //停<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; delay(2000);<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp; }<br>
+                  &nbsp; }<br>
+                  }</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="col-lg-8 col-md-10 mx-auto">app inventor</div>
+        <div style="text-align: center;"><img src="%E6%9C%9F%E6%9C%AB%E5%B0%88%E9%A1%8C%E5%9C%96%E7%89%87/appinventor2.jpg"
+
+            alt="" style="width: 765px; height: 664px;" class="b"><img src="%E6%9C%9F%E6%9C%AB%E5%B0%88%E9%A1%8C%E5%9C%96%E7%89%87/appinventor1.jpg"
+
+            alt="" style="width: 648px; height: 697px;"></div>
+        <div style="text-align: center;"><br>
+        </div>
+        <div class="col-lg-8 col-md-10 mx-auto">車車(12.17)</div>
+        <div style="text-align: center;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+          &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <img src="img/car.jpg" alt=""></div>
+        <br>
+        <div class="col-lg-8 col-md-10 mx-auto">車車(12.30)</div>
+        <div style="text-align: center;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+          &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <img src="img/car2.jpg" style="width: 804px; height: 445px;"></div>
+        <div class="col-lg-8 col-md-10 mx-auto" style="text-align: left;">紅外線感測</div>
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <table style="width: 100%;" border="1">
+            <tbody>
+              <tr>
+                <td class="b">//聲控自走車車<br>
+                  //目的:可以一邊透過藍芽聲控，當快從桌邊掉下去的時候，紅外線會感測並停止移動，並顯示於螢幕上，等待下一個聲控指令<br>
+                  <br>
+                  #define&nbsp;&nbsp; DirR&nbsp;&nbsp;&nbsp; 12<br>
+                  #define&nbsp;&nbsp; DirL&nbsp;&nbsp;&nbsp; 11<br>
+                  #define&nbsp;&nbsp; PwmL&nbsp;&nbsp; 9<br>
+                  #define&nbsp;&nbsp; PwmR&nbsp; 10<br>
+                  //螢幕:SDA(紫)A4；SCL(藍)A5；白接正；灰接負<br>
+                  #include &lt;LiquidCrystal_I2C.h&gt;<br>
+                  LiquidCrystal_I2C lcd(0x3F, 16, 2); //螢幕顯示<br>
+                  #define&nbsp;&nbsp; infrared1&nbsp;&nbsp; A1&nbsp; //右紅外線<br>
+                  #define&nbsp;&nbsp; infrared2&nbsp;&nbsp; A2&nbsp; //左紅外線<br>
+                  int val1, val2; //val1:A1&nbsp; val2:A2<br>
+                  int irin;<br>
+                  int inB = 0;<br>
+                  int inBB = inB;<br>
+                  int check = 0;<br>
+                  <br>
+                  void cM(int dL, int dR, int sL, int sR) {
+                  //馬達移動的函式=&gt;醬子就不用一直寫了<br>
+                  &nbsp; digitalWrite(DirL, dL);<br>
+                  &nbsp; digitalWrite(DirR, dR);<br>
+                  &nbsp; analogWrite(PwmL, sL);<br>
+                  &nbsp; analogWrite(PwmR, sR);<br>
+                  }<br>
+                  void setup()<br>
+                  {<br>
+                  &nbsp; lcd.init();<br>
+                  &nbsp; lcd.backlight();&nbsp; //螢幕背景調成亮的<br>
+                  &nbsp; lcd.setCursor(0, 1);&nbsp; //由(0,1)這個位置顯示<br>
+                  &nbsp; lcd.print("START &gt;3&lt;");<br>
+                  &nbsp; Serial.begin(115200); //藍芽接收<br>
+                  &nbsp; analogWrite(PwmL, 0);<br>
+                  &nbsp; analogWrite(PwmR, 0);<br>
+                  &nbsp; cM(HIGH, HIGH, 0, 0);<br>
+                  &nbsp; delay(3000);<br>
+                  &nbsp; lcd.clear();<br>
+                  }<br>
+                  void loop()<br>
+                  {<br>
+                  &nbsp; val1 = analogRead(infrared1);<br>
+                  &nbsp; val2 = analogRead(infrared2);<br>
+                  &nbsp; if (Serial.available() &gt; 0) {<br>
+                  &nbsp;&nbsp;&nbsp; char i = Serial.read(); //給藍芽輸入的值<br>
+                  &nbsp;&nbsp;&nbsp; inB = i - 48; //輸入是char 轉成 int<br>
+                  &nbsp;&nbsp;&nbsp; if (inB == 4)inB = 8;<br>
+                  &nbsp;&nbsp;&nbsp; if (inB == 5)inB = 10;<br>
+                  &nbsp; }<br>
+                  <br>
+                  &nbsp; //左前方前進<br>
+                  &nbsp; while (inB == 1) {<br>
+                  &nbsp;&nbsp;&nbsp; if (inBB != 1)&nbsp;
+                  //車子在行進時無法順暢的前進而是會走走停停，加了一個if做判斷，<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  //讓他檢查前一次與這一次的指令是否相同，再決定要不要做停的動作<br>
+                  &nbsp;&nbsp;&nbsp; {<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; digitalWrite(PwmL, 0);<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; digitalWrite(PwmR, 0);<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; delay(300);<br>
+                  &nbsp;&nbsp;&nbsp; }<br>
+                  &nbsp;&nbsp;&nbsp; if (val2 &lt; 300) { //當左邊紅外線還感應在桌面上時<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cM(HIGH, HIGH, 100, 250); <br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (check != 11)&nbsp;
+                  //螢幕原來會有閃動一邊顯示的問題，加了個if做判斷何時清除有好一些<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; lcd.clear();<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; lcd.setCursor(0, 1);<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; lcd.print("LEFT+FRONT");<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //delay(300);<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; inBB = 1;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; check = 11;<br>
+                  &nbsp;&nbsp;&nbsp; }<br>
+                  &nbsp;&nbsp;&nbsp; else {<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cM(HIGH, HIGH, 0, 0);<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (check != 12)<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; lcd.clear();<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; lcd.setCursor(0, 1);<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; lcd.print("GONNA FALL DOWN1");<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; check = 12;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break;<br>
+                  &nbsp;&nbsp;&nbsp; }<br>
+                  &nbsp;&nbsp;&nbsp; val1 = analogRead(infrared1);<br>
+                  &nbsp;&nbsp;&nbsp; val2 = analogRead(infrared2);<br>
+                  &nbsp;&nbsp;&nbsp; if (Serial.available() &gt; 0) {
+                  //迴圈內更新藍芽出入值作為跳出的標準<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; char i = Serial.read();<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; inB = i - 48;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (inB == 4)inB = 8;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (inB == 5)inB = 10;<br>
+                  &nbsp;&nbsp;&nbsp; }<br>
+                  &nbsp; }<br>
+                  <br>
+                  //前進<br>
+                  &nbsp; while (inB == 2) {<br>
+                  &nbsp;&nbsp;&nbsp; if (inBB != 2)<br>
+                  &nbsp;&nbsp;&nbsp; {<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; digitalWrite(PwmL, 0);<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; digitalWrite(PwmR, 0);<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; delay(300);<br>
+                  &nbsp;&nbsp;&nbsp; }<br>
+                  &nbsp;&nbsp;&nbsp; if (val1 &lt; 300 &amp;&amp; val2 &lt; 300)
+                  { //當左邊&amp;右邊紅外線還感應在桌面上時<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cM(HIGH, HIGH, 180, 180); <br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (check != 21)<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; lcd.clear();<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; lcd.setCursor(0, 1);<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; lcd.print("FRONT:180");<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //delay(300);<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; inBB = 2;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; check = 21;<br>
+                  <br>
+                  &nbsp;&nbsp;&nbsp; }<br>
+                  &nbsp;&nbsp;&nbsp; else {<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cM(HIGH, HIGH, 0, 0);<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (check != 22)<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; lcd.clear();<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; lcd.setCursor(0, 1);<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; lcd.print("GONNA FALL DOWN2");<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; check = 22;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; delay(300);<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break;<br>
+                  &nbsp;&nbsp;&nbsp; }<br>
+                  &nbsp;&nbsp;&nbsp; val1 = analogRead(infrared1);<br>
+                  &nbsp;&nbsp;&nbsp; val2 = analogRead(infrared2);<br>
+                  &nbsp;&nbsp;&nbsp; if (Serial.available() &gt; 0) {<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; char i = Serial.read();<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; inB = i - 48;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (inB == 4)inB = 8;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (inB == 5)inB = 10;<br>
+                  &nbsp;&nbsp;&nbsp; }<br>
+                  &nbsp;&nbsp;&nbsp; if (inB != 2)break;<br>
+                  &nbsp; }<br>
+                  <br>
+                  <br>
+                  //右前方前進<br>
+                  &nbsp; while (inB == 3)&nbsp; {<br>
+                  &nbsp;&nbsp;&nbsp; if (inBB != 3)<br>
+                  &nbsp;&nbsp;&nbsp; {<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; digitalWrite(PwmL, 0);<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; digitalWrite(PwmR, 0);<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; delay(300);<br>
+                  &nbsp;&nbsp;&nbsp; }<br>
+                  &nbsp;&nbsp;&nbsp; if (val1 &lt; 300) { //當右邊紅外線還感應在桌面上時<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cM(HIGH, HIGH, 250, 150); <br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (check != 31)<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; lcd.clear();<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; lcd.setCursor(0, 1); //等於(0,1)<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; lcd.print("RIGHT + FRONT");<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; check = 31;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; inBB = 3;<br>
+                  &nbsp;&nbsp;&nbsp; }<br>
+                  &nbsp;&nbsp;&nbsp; else {<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cM(HIGH, HIGH, 0, 0);<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (check != 32)<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; lcd.clear();<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; lcd.setCursor(0, 1);<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; lcd.print("GONNA FALL DOWN3");<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; check = 32;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break;<br>
+                  &nbsp;&nbsp;&nbsp; }<br>
+                  &nbsp;&nbsp;&nbsp; val1 = analogRead(infrared1);<br>
+                  &nbsp;&nbsp;&nbsp; val2 = analogRead(infrared2);<br>
+                  &nbsp;&nbsp;&nbsp; if (Serial.available() &gt; 0) {<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; char i = Serial.read();<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; inB = i - 48;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (inB == 4)inB = 8;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (inB == 5)inB = 10;<br>
+                  &nbsp;&nbsp;&nbsp; }<br>
+                  &nbsp; }<br>
+                  &nbsp;<br>
+                  //以下 順時針、逆時針、停止、後退　不需同時接收藍芽&amp;紅外線：<br>
+                  //因為順時針、逆時針都是在原地轉，沒有掉下來的問題，後退則是因為沒有向後的紅外線感應器，所以無法判斷<br>
+                  <br>
+                  //逆時針<br>
+                  //inB(藍芽感測值)會感測到4<br>
+                  //原來用 inB==4 會有藍芽輸出後車子大當機的問題，所以改成8試試<br>
+                  &nbsp; while (inB == 8)&nbsp; {<br>
+                  &nbsp;&nbsp;&nbsp; if (inBB != 8)<br>
+                  &nbsp;&nbsp;&nbsp; {<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; digitalWrite(PwmL, 0);<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; digitalWrite(PwmR, 0);<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; delay(300);<br>
+                  &nbsp;&nbsp;&nbsp; }<br>
+                  &nbsp;&nbsp;&nbsp; cM(LOW, HIGH, 120, 120); <br>
+                  &nbsp;&nbsp;&nbsp; if(check != 4)<br>
+                  &nbsp;&nbsp;&nbsp; lcd.clear();<br>
+                  &nbsp;&nbsp;&nbsp; lcd.setCursor(0, 1);<br>
+                  &nbsp;&nbsp;&nbsp; lcd.print("COUNTERCLOCKWISE");<br>
+                  &nbsp;&nbsp;&nbsp; inBB = 8;<br>
+                  &nbsp;&nbsp;&nbsp; check = 4;<br>
+                  &nbsp;&nbsp;&nbsp; val1 = analogRead(infrared1);<br>
+                  &nbsp;&nbsp;&nbsp; val2 = analogRead(infrared2);<br>
+                  &nbsp;&nbsp;&nbsp; if (Serial.available() &gt; 0) {<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; char i = Serial.read();<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; inB = i - 48;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (inB == 4)inB = 8; //4修改轉成8<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (inB == 5)inB = 10;&nbsp;
+                  //5修改轉成10<br>
+                  &nbsp;&nbsp;&nbsp; }<br>
+                  &nbsp; }<br>
+                  &nbsp; //BT4 end<br>
+                  &nbsp; <br>
+                  //後退<br>
+                  //inB(藍芽感測值)會感測到5<br>
+                  //原來用 inB==5 會有藍芽輸出後車子大當機的問題，所以改成10試試<br>
+                  &nbsp; while (inB == 10) {<br>
+                  &nbsp;&nbsp;&nbsp; if (inBB != 10)<br>
+                  &nbsp;&nbsp;&nbsp; {<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; digitalWrite(PwmL, 0);<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; digitalWrite(PwmR, 0);<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; delay(300);<br>
+                  &nbsp;&nbsp;&nbsp; }<br>
+                  &nbsp;&nbsp;&nbsp; cM(LOW, LOW, 120, 120); <br>
+                  &nbsp;&nbsp;&nbsp; if(check != 5)<br>
+                  &nbsp;&nbsp;&nbsp; lcd.clear();<br>
+                  &nbsp;&nbsp;&nbsp; lcd.setCursor(0, 1);<br>
+                  &nbsp;&nbsp;&nbsp; lcd.print("BACK:150");<br>
+                  &nbsp;&nbsp;&nbsp; inBB = 10;<br>
+                  &nbsp;&nbsp;&nbsp; check = 5;<br>
+                  &nbsp;&nbsp;&nbsp; val1 = analogRead(infrared1);<br>
+                  &nbsp;&nbsp;&nbsp; val2 = analogRead(infrared2);<br>
+                  &nbsp;&nbsp;&nbsp; if (Serial.available() &gt; 0) {<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; char i = Serial.read();<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; inB = i - 48;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (inB == 4)inB = 8;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (inB == 5)inB = 10;<br>
+                  &nbsp;&nbsp;&nbsp; }<br>
+                  &nbsp; }<br>
+                  <br>
+                  //順時針<br>
+                  &nbsp; while (inB == 6)&nbsp; {<br>
+                  &nbsp;&nbsp;&nbsp; if (inBB != 6)<br>
+                  &nbsp;&nbsp;&nbsp; {<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; digitalWrite(PwmL, 0);<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; digitalWrite(PwmR, 0);<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; delay(300);<br>
+                  &nbsp;&nbsp;&nbsp; }<br>
+                  &nbsp;&nbsp;&nbsp; cM(HIGH, LOW, 100, 100); <br>
+                  &nbsp;&nbsp;&nbsp; if(check!=6)<br>
+                  &nbsp;&nbsp;&nbsp; lcd.clear();<br>
+                  &nbsp;&nbsp;&nbsp; lcd.setCursor(0, 1);<br>
+                  &nbsp;&nbsp;&nbsp; lcd.print("CLOCKWISE");<br>
+                  &nbsp;&nbsp;&nbsp; inBB = 6;<br>
+                  &nbsp;&nbsp;&nbsp; check = 6;<br>
+                  &nbsp;&nbsp;&nbsp; val1 = analogRead(infrared1);<br>
+                  &nbsp;&nbsp;&nbsp; val2 = analogRead(infrared2);<br>
+                  &nbsp;&nbsp;&nbsp; if (Serial.available() &gt; 0) {<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; char i = Serial.read();<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; inB = i - 48;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (inB == 4)inB = 8;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (inB == 5)inB = 10;<br>
+                  &nbsp;&nbsp;&nbsp; }<br>
+                  &nbsp; }<br>
+                  <br>
+                  //停<br>
+                  &nbsp; while (inB == 7) {<br>
+                  &nbsp;&nbsp;&nbsp; if (inBB != 7)<br>
+                  &nbsp;&nbsp;&nbsp; {<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; digitalWrite(PwmL, 0);<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; digitalWrite(PwmR, 0);<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; delay(300);<br>
+                  &nbsp;&nbsp;&nbsp; }<br>
+                  &nbsp;&nbsp;&nbsp; cM(HIGH, HIGH, 0, 0); <br>
+                  &nbsp;&nbsp;&nbsp; if(check!=7)<br>
+                  &nbsp;&nbsp;&nbsp; lcd.clear();<br>
+                  &nbsp;&nbsp;&nbsp; lcd.setCursor(0, 1);<br>
+                  &nbsp;&nbsp;&nbsp; lcd.print("STOP");<br>
+                  &nbsp;&nbsp;&nbsp; inBB = 7;<br>
+                  &nbsp;&nbsp;&nbsp; check = 7;<br>
+                  &nbsp;&nbsp;&nbsp; val1 = analogRead(infrared1);<br>
+                  &nbsp;&nbsp;&nbsp; val2 = analogRead(infrared2);<br>
+                  &nbsp;&nbsp;&nbsp; if (Serial.available() &gt; 0) {<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; char i = Serial.read();<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; inB = i - 48;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (inB == 4)inB = 8;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (inB == 5)inB = 10;<br>
+                  &nbsp;&nbsp;&nbsp; }<br>
+                  &nbsp; }<br>
+                  <br>
+                  } //LOOP END</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <hr>
+    <!-- Footer -->
+    <footer>
+      <div class="container">
+        <div class="clearfix"> <a class="btn btn-primary float-right" href="https://tsai-reena.github.io/home/">
+            回到主頁面 →</a> </div>
+        <div class="row">
+          <div class="col-lg-8 col-md-10 mx-auto">
+            <p class="copyright text-muted">Copyright © Your Website 2020</p>
+          </div>
+        </div>
+      </div>
+    </footer>
+    <!-- Bootstrap core JavaScript -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom scripts for this template -->
+    <script src="js/clean-blog.min.js"></script>
+  </body>
+</html>
